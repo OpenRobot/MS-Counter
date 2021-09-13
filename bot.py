@@ -191,6 +191,10 @@ async def table(ctx):
 
     await ctx.send(embed=embed)
 
+@bot.command()
+async def convert(ctx, num:int):
+    return await ctx.reply(f"{num} in roman numeral is {write_roman(num)}!\n\nFor the full table run `rc?table`")
+
 bot.load_extension('jishaku')
 
 bot.run(TOKEN)
