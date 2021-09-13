@@ -18,6 +18,8 @@ bot.db = db
 def write_roman(num):
 
     roman = OrderedDict()
+    roman[10000] = "X̅"
+    roman[5000] = "V̅"
     roman[1000] = "M"
     roman[900] = "CM"
     roman[500] = "D"
@@ -47,6 +49,9 @@ def padding(d: dict, *, separator: str = ': '):
 
 @bot.event
 async def on_message(msg: discord.Message):
+    if msg.author.bot:
+        return
+        
     await bot.process_commands(msg)
 
     if msg.channel.id == 886133032103313458:
@@ -124,6 +129,10 @@ async def leaderboard(ctx):
 @bot.command(aliases=['r'])
 async def rank(ctx, *, target: discord.Member = None):
     target = target or ctx.author
+
+    if target.bot:
+        return await ctx.send("Bots are not included in this party, sorry!")
+        
     while True:
         try:
             async with db.db.acquire() as conn:
@@ -153,7 +162,7 @@ Recent counts:
 
     await ctx.send(embed=embed)
 
-@bot.command(aliases=['list', 'show'])
+@bot.command(aliases=['list', 'show', 'chart'])
 async def table(ctx):
     embed = discord.Embed().set_author(name = "Roman Table:", icon_url=ctx.author.avatar.url)
     embed.timestamp = datetime.utcnow()
@@ -161,18 +170,14 @@ async def table(ctx):
 
     d = {
         "1": "I",
-        "4": "IV",
         "5": "V",
-        "9": "IX",
         "10": "X",
-        "40": "XL",
         "50": "L",
-        "90": "XC",
         "100": "C",
-        "400": "CD",
         "500": "D",
-        "900": "CM",
-        "1000": "M"
+        "1000": "M",
+        "5000": "V̅",
+        "10000": "X̅"
     }
 
     embed.description = f"```yaml\n{padding(d)}```"
