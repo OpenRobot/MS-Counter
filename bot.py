@@ -89,6 +89,13 @@ async def on_message(msg: discord.Message):
         n = await db.get_current_number()
         if str(msg.content).startswith(str(write_roman(n + 1))):
             await db.set_number(msg.author, msg, n + 1)
+
+            if ((n + 1) % 50) == 0:
+                try:
+                    await msg.pin(reason=f"Counted to {write_roman(n + 1)} ({n + 1}) (Multiple of 100 [current milestone])")
+                    await msg.channel.send(f"We hit {write_roman(n + 1)} ({n + 1}) counts! The one who achieved this was {msg.author.mention} - `{msg.author}`!")
+                except:
+                    pass
         else:
             await msg.delete()
 
