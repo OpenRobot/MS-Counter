@@ -131,12 +131,12 @@ async def leaderboard(ctx):
         if item['user_id'] == ctx.author.id:
             embed.description += f"""
 **{bot.get_user(item['user_id'])}:** `{item['counts']} Roman Counts`
-\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in json.loads(item['recent_counts'])[-5:]])}
+\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}
             """
         else:
             embed.description += f"""
 {bot.get_user(item['user_id'])}: `{item['counts']} Roman Counts`
-\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in json.loads(item['recent_counts'])[-5:]])}
+\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}
             """
 
     await ctx.send(embed=embed)
@@ -172,7 +172,7 @@ async def rank(ctx, *, target: discord.Member = None):
 Recent counts:
     """
 
-    for i in json.loads(res['recent_counts'])[-5:]:
+    for i in reversed(json.loads(res['recent_counts'])[-5:]):
         embed.description += (('\u200b ' * 3) + f'- [`{write_roman(i["num"])}`]({i["message_url"]})' + '\n')
 
     await ctx.send(embed=embed)
