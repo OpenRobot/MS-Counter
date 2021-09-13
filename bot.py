@@ -8,6 +8,7 @@ from config import *
 from db import Database
 from collections import OrderedDict
 import jishaku
+from roman import Roman
 
 intents = discord.Intents.all()
 bot = commands.Bot(commands.when_mentioned_or('rc!', 'rc?', '?rc ', '!rc ', '?rc', '!rc'), intents=intents, help_command=commands.MinimalHelpCommand(no_category="Roman"), description="A roman counter bot!", owner_ids=[699839134709317642, 621266489596444672])
@@ -15,45 +16,11 @@ bot = commands.Bot(commands.when_mentioned_or('rc!', 'rc?', '?rc ', '!rc ', '?rc
 db = Database(asyncio.get_event_loop(), DATABASE_URI)
 bot.db = db
 
-def write_roman(num):
-
-    roman = OrderedDict()
-    roman[100000] = "C̅"
-    roman[90000] = "X̅C̅"
-    roman[50000] = "L̅"
-    roman[40000] = "X̅L̅"
-    roman[10000] = "X̅"
-    roman[9000] = "MX̅"
-    roman[5000] = "V̅"
-    roman[1000] = "M"
-    roman[900] = "CM"
-    roman[500] = "D"
-    roman[400] = "CD"
-    roman[100] = "C"
-    roman[90] = "XC"
-    roman[50] = "L"
-    roman[40] = "XL"
-    roman[10] = "X"
-    roman[9] = "IX"
-    roman[5] = "V"
-    roman[4] = "IV"
-    roman[1] = "I"
-
-    def roman_num(num):
-        for r in roman.keys():
-            x, y = divmod(num, r)
-            yield roman[r] * x
-            num -= (r * x)
-            if num <= 0:
-                break
-
-    return "".join([a for a in roman_num(num)])
-
 def padding(d: dict, *, separator: str = ': '):
     return "\n".join(f"{k.rjust(len(max(d.keys(), key=len)))}{separator}{v}" for k, v in d.items())
 
 bot.padding = padding
-bot.roman = write_roman
+bot.roman = Roman()
 
 @bot.event
 async def on_message(msg: discord.Message):
@@ -95,13 +62,13 @@ async def on_message(msg: discord.Message):
                     return await msg.delete()
 
         n = await db.get_current_number()
-        if str(msg.content).startswith(str(write_roman(n + 1))):
+        if str(msg.content).startswith(str(bot.roman.encode(n + 1))):
             await db.set_number(msg.author, msg, n + 1)
 
             if ((n + 1) % 50) == 0:
                 try:
-                    await msg.pin(reason=f"Counted to {write_roman(n + 1)} ({n + 1}) (Multiple of 100 [current milestone])")
-                    await msg.channel.send(f"We hit {write_roman(n + 1)} ({n + 1}) counts! The one who achieved this was {msg.author.mention} - `{msg.author}`!")
+                    await msg.pin(reason=f"Counted to {bot.roman.encode(n + 1)} ({n + 1}) (Multiple of 100 [current milestone])")
+                    await msg.channel.send(f"We hit {bot.roman.encode(n + 1)} ({n + 1}) counts! The one who achieved this was {msg.author.mention} - `{msg.author}`!")
                 except:
                     pass
         else:
@@ -133,12 +100,12 @@ async def leaderboard(ctx):
         if item['user_id'] == ctx.author.id:
             embed.description += f"""
 **{c}. {bot.get_user(item['user_id'])}:** `{item['counts']} Roman Counts`
-**\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}**
+**\u200b \u200b \u200b Recent counts: {', '.join([f'[`{bot.roman.encode(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}**
             """
         else:
             embed.description += f"""
 {c}. {bot.get_user(item['user_id'])}: `{item['counts']} Roman Counts`
-\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}
+\u200b \u200b \u200b Recent counts: {', '.join([f'[`{bot.roman.encode(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}
             """
 
         c += 1
@@ -177,7 +144,7 @@ Recent counts:
     """
 
     for i in reversed(json.loads(res['recent_counts'])[-5:]):
-        embed.description += (('\u200b ' * 3) + f'- [`{write_roman(i["num"])}`]({i["message_url"]})' + '\n')
+        embed.description += (('\u200b ' * 3) + f'- [`{bot.roman.encode(i["num"])}`]({i["message_url"]})' + '\n')
 
     await ctx.send(embed=embed)
 
@@ -187,22 +154,7 @@ async def table(ctx):
     embed.timestamp = datetime.utcnow()
     embed.color = 0x1FB052
 
-    d = {
-        "1": "I",
-        "5": "V",
-        "10": "X",
-        "50": "L",
-        "100": "C",
-        "500": "D",
-        "1000": "M",
-        "5000": "V̅",
-        "10000": "X̅", 
-        "50000": "L̅",
-        "90000": "X̅C̅",
-        "100000": "C̅"
-    }
-
-    embed.description = f"```yaml\n{padding(d)}```"
+    embed.description = f"```yaml\n{padding(bot.roman.roman)}```"
 
     await ctx.send(embed=embed)
 
@@ -216,13 +168,13 @@ async def convert(ctx, num):
     if num > 300000:
         return await ctx.send("Chill there bro.")
 
-    return await ctx.reply(f"`{num}` in roman numeral is `{write_roman(num)}`!\n\nFor the full table run `rc?table`")
+    return await ctx.reply(f"`{num}` in roman numeral is `{bot.roman.encode(num)}`!\n\nFor the full table run `rc?table`")
 
 @bot.command()
 async def current(ctx):
     num = await db.get_current_number()
 
-    await ctx.send(f"You are currently on `{write_roman(num)} ({num})`.")
+    await ctx.send(f"You are currently on `{bot.roman.encode(num)} ({num})`.")
 
 bot.load_extension('jishaku')
 
