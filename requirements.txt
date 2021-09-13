@@ -1,0 +1,3 @@
+jishaku
+discord
+asyncpg
