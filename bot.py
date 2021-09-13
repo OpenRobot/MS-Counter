@@ -218,6 +218,12 @@ async def convert(ctx, num):
 
     return await ctx.reply(f"`{num}` in roman numeral is `{write_roman(num)}`!\n\nFor the full table run `rc?table`")
 
+@bot.command()
+async def current(ctx):
+    num = await db.get_current_number()
+
+    await ctx.send(f"You are currently on `{write_roman(num)} ({num})`.")
+
 bot.load_extension('jishaku')
 
 bot.run(TOKEN)
