@@ -134,13 +134,13 @@ async def rank(ctx, *, target: discord.Member = None):
         if target == ctx.author:
             return await ctx.send("Go count some roman in <#886133032103313458> first!")
         else:
-            return await ctx.send(f"{target} hasn't counted any romanian numbers in <#886133032103313458> yet!")
+            return await ctx.send(f"{target} hasn't counted any roman numbers in <#886133032103313458> yet!")
 
     embed = discord.Embed().set_author(name="Leaderboard:", icon_url=ctx.author.avatar.url)
     embed.timestamp = datetime.utcnow()
     embed.color = 0x1FB052
     embed.description = f"""
-{'You' if target == ctx.author else target} have counted a total of `{res['counts']} Romanian Numbers`.
+{'You' if target == ctx.author else target} have counted a total of `{res['counts']} Roman Numbers`.
 
 Recent counts:
     """
