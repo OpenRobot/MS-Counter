@@ -8,6 +8,12 @@ class Database:
 
         self.is_modifying = False
 
+    def wait_until_not_modifying(self):
+        while self.is_modifying:
+            pass
+
+        return
+
     async def initialize(self):
         while True:
             try:
@@ -64,8 +70,7 @@ class Database:
 
     async def get_current_number(self) -> int:
         while True:
-            if self.is_modifying:
-                continue
+            self.wait_until_not_modifying()
 
             try:
                 async with self.db.acquire() as conn:
