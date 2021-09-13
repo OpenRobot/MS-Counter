@@ -18,8 +18,8 @@ bot.db = db
 def write_roman(num):
 
     roman = OrderedDict()
-    roman[100000] = "X̅C̅"
-    roman[90000] = "C̅"
+    roman[100000] = "C̅"
+    roman[90000] = "X̅C̅"
     roman[50000] = "L̅"
     roman[40000] = "X̅L̅"
     roman[10000] = "X̅"
@@ -194,6 +194,7 @@ async def table(ctx):
         "5000": "V̅",
         "10000": "X̅", 
         "50000": "L̅",
+        "90000": "X̅C̅",
         "100000": "C̅"
     }
 
