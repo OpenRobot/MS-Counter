@@ -6,6 +6,8 @@ class Database:
         self.db = None
         loop.run_until_complete(self.initialize())
 
+        self.is_modifying = False
+
     async def initialize(self):
         while True:
             try:
@@ -62,6 +64,9 @@ class Database:
 
     async def get_current_number(self) -> int:
         while True:
+            if self.is_modifying:
+                continue
+
             try:
                 async with self.db.acquire() as conn:
                     x = await conn.fetchrow("SELECT * FROM counter")
@@ -79,6 +84,8 @@ class Database:
             return x['count']
 
     async def set_number(self, author, msg, num: int):
+        self.is_modifying = True
+
         while True:
             try:
                 async with self.db.acquire() as conn:
@@ -126,5 +133,7 @@ class Database:
                 pass
             else:
                 break
+
+        self.is_modifying = False
 
         return int(num)
