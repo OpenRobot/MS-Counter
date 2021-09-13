@@ -131,7 +131,7 @@ async def leaderboard(ctx):
         if item['user_id'] == ctx.author.id:
             embed.description += f"""
 **{bot.get_user(item['user_id'])}:** `{item['counts']} Roman Counts`
-\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}
+**\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}**
             """
         else:
             embed.description += f"""
