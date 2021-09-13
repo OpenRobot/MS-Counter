@@ -82,7 +82,7 @@ async def on_message(msg: discord.Message):
                     return await msg.delete()
 
         n = await db.get_current_number()
-        if str(msg.content) == str(write_roman(n + 1)):
+        if str(msg.content).startswith(str(write_roman(n + 1))):
             await db.set_number(msg.author, msg, n + 1)
         else:
             await msg.delete()
