@@ -10,7 +10,7 @@ from collections import OrderedDict
 import jishaku
 
 intents = discord.Intents.all()
-bot = commands.Bot(commands.when_mentioned_or('rc!', 'rc?', '?rc ', '!rc ', '?rc', '!rc'), intents=intents, help_command=commands.MinimalHelpCommand(no_category="Misc"), description="A roman counter bot!", owner_ids=[699839134709317642, 621266489596444672])
+bot = commands.Bot(commands.when_mentioned_or('rc!', 'rc?', '?rc ', '!rc ', '?rc', '!rc'), intents=intents, help_command=commands.MinimalHelpCommand(no_category="Roman"), description="A roman counter bot!", owner_ids=[699839134709317642, 621266489596444672])
 
 db = Database(asyncio.get_event_loop(), DATABASE_URI)
 bot.db = db
