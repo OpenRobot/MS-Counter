@@ -42,6 +42,9 @@ def write_roman(num):
 
     return "".join([a for a in roman_num(num)])
 
+def padding(d: dict, *, separator: str = ': '):
+    return "\n".join(f"{k.rjust(len(max(d.keys(), key=len)))}{separator}{v}" for k, v in d.items())
+
 @bot.event
 async def on_message(msg: discord.Message):
     await bot.process_commands(msg)
@@ -147,6 +150,32 @@ Recent counts:
 
     for i in json.loads(res['recent_counts'])[:5]:
         embed.description += (('\u200b ' * 3) + f'- [`{write_roman(i["num"])}`]({i["message_url"]})' + '\n')
+
+    await ctx.send(embed=embed)
+
+@bot.command(aliases=['list', 'show'])
+async def table(ctx):
+    embed = discord.Embed().set_author(name = "Roman Table:", icon_url=ctx.author.avatar.url)
+    embed.timestamp = datetime.utcnow()
+    embed.color = 0x1FB052
+
+    d = {
+        "1": "I",
+        "4": "IV",
+        "5": "V",
+        "9": "IX",
+        "10": "X",
+        "40": "XL",
+        "50": "L",
+        "90": "XC",
+        "100": "C",
+        "400": "CD",
+        "500": "D",
+        "900": "CM",
+        "1000": "M"
+    }
+
+    embed.description = f"```yaml\n{padding(d)}```"
 
     await ctx.send(embed=embed)
 
