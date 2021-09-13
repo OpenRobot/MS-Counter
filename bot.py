@@ -18,7 +18,12 @@ bot.db = db
 def write_roman(num):
 
     roman = OrderedDict()
+    roman[100000] = "X̅C̅"
+    roman[90000] = "C̅"
+    roman[50000] = "L̅"
+    roman[40000] = "X̅L̅"
     roman[10000] = "X̅"
+    roman[9000] = "MX̅"
     roman[5000] = "V̅"
     roman[1000] = "M"
     roman[900] = "CM"
@@ -46,6 +51,9 @@ def write_roman(num):
 
 def padding(d: dict, *, separator: str = ': '):
     return "\n".join(f"{k.rjust(len(max(d.keys(), key=len)))}{separator}{v}" for k, v in d.items())
+
+bot.padding = padding
+bot.roman = write_roman
 
 @bot.event
 async def on_message(msg: discord.Message):
@@ -184,7 +192,9 @@ async def table(ctx):
         "500": "D",
         "1000": "M",
         "5000": "V̅",
-        "10000": "X̅"
+        "10000": "X̅", 
+        "50000": "L̅",
+        "100000": "C̅"
     }
 
     embed.description = f"```yaml\n{padding(d)}```"
@@ -196,7 +206,10 @@ async def convert(ctx, num):
     try:
         num = int(num)
     except:
-        return await ctx.send("Invalid integer.")
+        return await ctx.send("That is an Invalid integer.")
+        
+    if num > 100000:
+        return await ctx.send("Chill there bro.")
 
     return await ctx.reply(f"`{num}` in roman numeral is `{write_roman(num)}`!\n\nFor the full table run `rc?table`")
 
