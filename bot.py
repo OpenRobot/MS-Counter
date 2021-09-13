@@ -131,12 +131,12 @@ async def leaderboard(ctx):
         if item['user_id'] == ctx.author.id:
             embed.description += f"""
 **{bot.get_user(item['user_id'])}:** `{item['counts']} Roman Counts`
-\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in json.loads(item['recent_counts'])[:5]])}
+\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in json.loads(item['recent_counts'])[-5:]])}
             """
         else:
             embed.description += f"""
 {bot.get_user(item['user_id'])}: `{item['counts']} Roman Counts`
-\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in json.loads(item['recent_counts'])[:5]])}
+\u200b \u200b \u200b Recent counts: {', '.join([f'[`{write_roman(r["num"])}`]({r["message_url"]})' for r in json.loads(item['recent_counts'])[-5:]])}
             """
 
     await ctx.send(embed=embed)
@@ -172,7 +172,7 @@ async def rank(ctx, *, target: discord.Member = None):
 Recent counts:
     """
 
-    for i in json.loads(res['recent_counts'])[:5]:
+    for i in json.loads(res['recent_counts'])[-5:]:
         embed.description += (('\u200b ' * 3) + f'- [`{write_roman(i["num"])}`]({i["message_url"]})' + '\n')
 
     await ctx.send(embed=embed)
@@ -209,7 +209,7 @@ async def convert(ctx, num):
     except:
         return await ctx.send("That is an Invalid integer.")
         
-    if num > 100000:
+    if num > 300000:
         return await ctx.send("Chill there bro.")
 
     return await ctx.reply(f"`{num}` in roman numeral is `{write_roman(num)}`!\n\nFor the full table run `rc?table`")
