@@ -11,7 +11,7 @@ import jishaku
 from utils import Roman, Octal, Binary, Hexadecimal
 
 intents = discord.Intents.all()
-bot = commands.Bot(commands.when_mentioned_or('!countr ', '!count ', '?countr ', '?count ', '!countr', '!count', '?countr', '?count', 'countr ', 'count ', 'countr?', 'count?', 'countr!', 'count!', 'countr', 'count'), intents=intents, help_command=commands.MinimalHelpCommand(no_category="Misc"), description="A cool counter bot!", owner_ids=[699839134709317642, 621266489596444672])
+bot = commands.Bot(commands.when_mentioned_or('!countr ', '!counter ', '!count ', '?countr ', '?counter ', '?count ', '!countr', '!counter', '!count', '?countr', '?counter', '?count', 'countr ', 'counuter ', 'count ', 'countr?', 'counter?', 'count?', 'countr!', 'counter!', 'count!', 'countr', 'counter', 'count'), intents=intents, help_command=commands.MinimalHelpCommand(no_category="Misc"), description="A cool counter bot!", owner_ids=[699839134709317642, 621266489596444672])
 
 db = Database(asyncio.get_event_loop(), DATABASE_URI)
 bot.db = db
