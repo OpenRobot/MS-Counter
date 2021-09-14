@@ -85,13 +85,13 @@ class Octal(commands.Cog):
 **{c}. {self.bot.get_user(item['user_id'])}:** `{item['counts']} Octal Counts`
 **\u200b \u200b \u200b Recent counts: {', '.join([f'[`{self.bot.octal.encode(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}**
             """
-        else:
-            embed.description += f"""
+            else:
+                embed.description += f"""
 {c}. {self.bot.get_user(item['user_id'])}: `{item['counts']} Octal Counts`
 \u200b \u200b \u200b Recent counts: {', '.join([f'[`{self.bot.octal.encode(r["num"])}`]({r["message_url"]})' for r in reversed(json.loads(item['recent_counts'])[-5:])])}
                 """
 
-            c += 1
+                c += 1
 
         await ctx.send(embed=embed)
 
