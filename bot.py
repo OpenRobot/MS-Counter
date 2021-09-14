@@ -8,7 +8,7 @@ import jishaku
 from utils import Roman, Octal, Binary, Hexadecimal
 
 intents = discord.Intents.all()
-bot = commands.Bot(commands.when_mentioned_or('!countr ', '!counter ', '!count ', '?countr ', '?counter ', '?count ', '!countr', '!counter', '!count', '?countr', '?counter', '?count', 'countr ', 'counuter ', 'count ', 'countr?', 'counter?', 'count?', 'countr!', 'counter!', 'count!', 'countr', 'counter', 'count'), intents=intents, help_command=commands.MinimalHelpCommand(no_category="Misc"), description="A cool counter bot!", owner_ids=[699839134709317642, 621266489596444672])
+bot = commands.Bot(commands.when_mentioned_or('!countr ', '!counter ', '!count ', '?countr ', '?counter ', '?count ', '!countr', '!counter', '!count', '?countr', '?counter', '?count', 'countr ', 'counter ', 'count ', 'countr?', 'counter?', 'count?', 'countr!', 'counter!', 'count!', 'countr', 'counter', 'count'), intents=intents, help_command=commands.MinimalHelpCommand(no_category="Misc"), description="A cool counter bot!", owner_ids=[699839134709317642, 621266489596444672])
 
 db = Database(asyncio.get_event_loop(), DATABASE_URI)
 bot.db = db
@@ -30,6 +30,7 @@ async def on_ready():
 async def on_message(msg: discord.Message):
     if re.match(rf'^<@(!)?{bot.user.id}>$', msg.content):
         return await msg.channel.send("My prefix is `countr `! To get help, type `counutr help`!")
+    await bot.process_commands(msg)
 
 @bot.command(aliases=['latency'])
 async def ping(ctx):
