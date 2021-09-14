@@ -147,11 +147,12 @@ class BinaryDatabase:
     def __init__(self, loop, db_uri, db_obj):
         self.uri = str(db_uri)
         self.db = None
-        loop.run_until_complete(self.initialize())
 
         self.is_modifying = False
 
         self.db_obj = db_obj
+
+        loop.run_until_complete(self.initialize())
 
     def wait_until_not_modifying(self):
         while self.is_modifying:
@@ -295,11 +296,12 @@ class HexadecimalDatabase:
     def __init__(self, loop, db_uri, db_obj):
         self.uri = str(db_uri)
         self.db = None
-        loop.run_until_complete(self.initialize())
 
         self.is_modifying = False
 
         self.db_obj = db_obj
+
+        loop.run_until_complete(self.initialize())
 
     def wait_until_not_modifying(self):
         while self.is_modifying:
@@ -443,11 +445,12 @@ class OctalDatabase:
     def __init__(self, loop, db_uri, db_obj = None):
         self.uri = str(db_uri)
         self.db = None
-        loop.run_until_complete(self.initialize())
 
         self.is_modifying = False
 
         self.db_obj = db_obj
+
+        loop.run_until_complete(self.initialize())
 
     def wait_until_not_modifying(self):
         while self.is_modifying:
