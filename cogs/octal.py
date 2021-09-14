@@ -5,7 +5,7 @@ class Octal(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener
+    @commands.Cog.listener()
     async def on_message(self, msg: discord.Message):
         if msg.author.bot:
             return
