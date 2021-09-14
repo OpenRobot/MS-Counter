@@ -27,5 +27,6 @@ async def on_ready():
     print(f'{bot.user} Is Ready!')
 
 bot.load_extension('jishaku')
+bot.load_extension('cogs.roman')
 
 bot.run(TOKEN)

@@ -160,3 +160,6 @@ Recent counts:
         num = await self.bot.db.roman.get_current_number()
 
         await ctx.send(f"The current count is `{self.bot.roman.encode(num)} ({num})`.")
+
+def setup(bot):
+    bot.add_cog(Roman(bot))
