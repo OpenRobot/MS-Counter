@@ -1,4 +1,4 @@
-import asyncpg, asyncio, json
+import asyncpg, asyncio, json, time, random
 
 class RomanDatabase:
     def __init__(self, loop, db_uri):
@@ -599,3 +599,46 @@ class Database:
         self.binary = BinaryDatabase(*args, **kwargs)
         self.hexadecimal = HexadecimalDatabase(*args, **kwargs)
         self.octal = OctalDatabase(*args, **kwargs)
+
+    async def latency(self, *, all = False, choice = None):
+        if all:
+            d = {}
+
+            start = time.perf_counter()
+            await self.roman.db.fetch("SELECT 1")
+            end = time.perf_counter()
+            roman = (end-start) * 1000
+            d['roman'] = roman
+
+            start = time.perf_counter()
+            await self.binary.db.fetch("SELECT 1")
+            end = time.perf_counter()
+            binary = (end-start) * 1000
+            d['binary'] = binary
+
+            start = time.perf_counter()
+            await self.hexadecimal.db.fetch("SELECT 1")
+            end = time.perf_counter()
+            hexadecimal = (end-start) * 1000
+            d['hexadecimal'] = hexadecimal
+
+            start = time.perf_counter()
+            await self.octal.db.fetch("SELECT 1")
+            end = time.perf_counter()
+            octal = (end-start) * 1000
+            d['octal'] = octal
+
+            return d
+        else:
+            if choice is None:
+                choice = random.choice([self.roman, self.binary, self.hexadecimal, self.octal])
+            else:
+                if isinstance(choice, str):
+                    choice = getattr(self, choice, random.choice([self.roman, self.binary, self.hexadecimal, self.octal]))
+
+            start = time.perf_counter()
+            await choice.db.fetch("SELECT 1")
+            end = time.perf_counter()
+            choice_latency = (end-start) * 1000
+            
+            return choice_latency

@@ -27,7 +27,10 @@ bot.octal = Octal(db.octal)
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} (Counter Bot) Is Ready!') 
+    print(f'{bot.user} (Counter Bot) Is Ready!')
+
+@bot.command()
+async def ping(self, ctx)
 
 bot.load_extension('jishaku')
 bot.load_extension('cogs.roman')
