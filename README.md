@@ -1,5 +1,5 @@
 # MS Roman Counter
-A counter like the [Countr Bot](https://discord.com/users/467377486141980682), but this time, its roman!
+A counter like the [Countr Bot](https://discord.com/users/467377486141980682), but this time, its with other formats e.g roman and binary!
 
 # How to contact:
 Make an [Issue](https://github.com/LyricMaster-Bot/MS-Roman-Counter/issues/new) and state the issue. You can also provide feedback for our Roman Counter. You are free to assign [proguy914629bot](https://github.com/proguy914629bot) and/or [whyfai](https://github.com/whyfai) to the issues.
