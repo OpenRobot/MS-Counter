@@ -1,5 +1,5 @@
 class Roman:
-    def __init__(self):
+    def __init__(self, db):
         roman = dict()
         roman[100000] = "C̅"
         roman[90000] = "X̅C̅"
@@ -25,6 +25,8 @@ class Roman:
         self.roman = roman
 
         self.switched_roman = dict([(v, k) for k, v in self.roman.items()])
+
+        self.db = db
 
     def encode(self, num) -> str:
         def roman_num(num):

@@ -1,6 +1,6 @@
 import asyncpg, asyncio, json
 
-class Database:
+class RomanDatabase:
     def __init__(self, loop, db_uri):
         self.uri = str(db_uri)
         self.db = None
@@ -142,3 +142,7 @@ class Database:
         self.is_modifying = False
 
         return int(num)
+
+class Database:
+    def __init__(self, *args, **kwargs):
+        self.roman = RomanDatabase(*args, **kwargs)
