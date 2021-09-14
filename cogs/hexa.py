@@ -1,5 +1,6 @@
-import json, discord, datetime, asyncpg
+import json, discord, asyncpg
 from discord.ext import commands
+from datetime import datetime
 
 class Hexadecimal(commands.Cog):
     def __init__(self, bot):
