@@ -30,6 +30,7 @@ async def on_ready():
 async def on_message(msg: discord.Message):
     if re.match(rf'^<@(!)?{bot.user.id}>$', msg.content):
         return await msg.channel.send("My prefix is `countr `! To get help, type `counutr help`!")
+    await bot.process_commands(msg)
 
 @bot.command(aliases=['latency'])
 async def ping(ctx):
