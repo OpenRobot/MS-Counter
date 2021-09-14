@@ -43,18 +43,18 @@ class Hexadecimal(commands.Cog):
                     if user_id['user_id'] == msg.author.id:
                         return await msg.delete()
 
-                n = await self.bot.db.hexadecimal.get_current_number()
-                if str(msg.content).startswith(str(self.bot.hexadecimal.encode(n + 1))):
-                    await self.bot.db.hexadecimal.set_number(msg.author, msg, n + 1)
+            n = await self.bot.db.hexadecimal.get_current_number()
+            if str(msg.content).startswith(str(self.bot.hexadecimal.encode(n + 1))):
+                await self.bot.db.hexadecimal.set_number(msg.author, msg, n + 1)
 
-                    if ((n + 1) % 50) == 0:
-                        try:
-                            await msg.pin(reason=f"Counted to {self.bot.hexadecimal.encode(n + 1)} ({n + 1}) (Multiple of 50 [current milestone])")
-                            await msg.channel.send(f"We hit {self.bot.hexadecimal.encode(n + 1)} ({n + 1}) counts! The one who achieved this was {msg.author.mention} - `{msg.author}`!")
-                        except:
-                            pass
-                else:
-                    await msg.delete()
+                if ((n + 1) % 50) == 0:
+                    try:
+                        await msg.pin(reason=f"Counted to {self.bot.hexadecimal.encode(n + 1)} ({n + 1}) (Multiple of 50 [current milestone])")
+                        await msg.channel.send(f"We hit {self.bot.hexadecimal.encode(n + 1)} ({n + 1}) counts! The one who achieved this was {msg.author.mention} - `{msg.author}`!")
+                    except:
+                        pass
+            else:
+                await msg.delete()
 
     @commands.group(name='hexadecimal', aliases=['hex', 'hexa'], invoke_without_command=True, case_insensitive=True)
     async def _hex(self, ctx):

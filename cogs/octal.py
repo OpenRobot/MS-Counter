@@ -43,18 +43,18 @@ class Octal(commands.Cog):
                     if user_id['user_id'] == msg.author.id:
                         return await msg.delete()
 
-                n = await self.bot.db.octal.get_current_number()
-                if str(msg.content).startswith(str(self.bot.octal.encode(n + 1))):
-                    await self.bot.db.octal.set_number(msg.author, msg, n + 1)
+            n = await self.bot.db.octal.get_current_number()
+            if str(msg.content).startswith(str(self.bot.octal.encode(n + 1))):
+                await self.bot.db.octal.set_number(msg.author, msg, n + 1)
 
-                    if ((n + 1) % 50) == 0:
-                        try:
-                            await msg.pin(reason=f"Counted to {self.bot.octal.encode(n + 1)} ({n + 1}) (Multiple of 50 [current milestone])")
-                            await msg.channel.send(f"We hit {self.bot.octal.encode(n + 1)} ({n + 1}) counts! The one who achieved this was {msg.author.mention} - `{msg.author}`!")
-                        except:
-                            pass
-                else:
-                    await msg.delete()
+                if ((n + 1) % 50) == 0:
+                    try:
+                        await msg.pin(reason=f"Counted to {self.bot.octal.encode(n + 1)} ({n + 1}) (Multiple of 50 [current milestone])")
+                        await msg.channel.send(f"We hit {self.bot.octal.encode(n + 1)} ({n + 1}) counts! The one who achieved this was {msg.author.mention} - `{msg.author}`!")
+                    except:
+                        pass
+            else:
+                await msg.delete()
 
     @commands.group(name='octal', aliases=['oct'], invoke_without_command=True, case_insensitive=True)
     async def _octal(self, ctx):

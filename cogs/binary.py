@@ -43,18 +43,18 @@ class Binary(commands.Cog):
                     if user_id['user_id'] == msg.author.id:
                         return await msg.delete()
 
-                n = await self.bot.db.binary.get_current_number()
-                if str(msg.content).startswith(str(self.bot.binary.encode(n + 1))):
-                    await self.bot.db.binary.set_number(msg.author, msg, n + 1)
+            n = await self.bot.db.binary.get_current_number()
+            if str(msg.content).startswith(str(self.bot.binary.encode(n + 1))):
+                await self.bot.db.binary.set_number(msg.author, msg, n + 1)
 
-                    if ((n + 1) % 50) == 0:
-                        try:
-                            await msg.pin(reason=f"Counted to {self.bot.binary.encode(n + 1)} ({n + 1}) (Multiple of 50 [current milestone])")
-                            await msg.channel.send(f"We hit {self.bot.binary.encode(n + 1)} ({n + 1}) counts! The one who achieved this was {msg.author.mention} - `{msg.author}`!")
-                        except:
-                            pass
-                else:
-                    await msg.delete()
+                if ((n + 1) % 50) == 0:
+                    try:
+                        await msg.pin(reason=f"Counted to {self.bot.binary.encode(n + 1)} ({n + 1}) (Multiple of 50 [current milestone])")
+                        await msg.channel.send(f"We hit {self.bot.binary.encode(n + 1)} ({n + 1}) counts! The one who achieved this was {msg.author.mention} - `{msg.author}`!")
+                    except:
+                        pass
+            else:
+                await msg.delete()
 
     @commands.group(name='binary', invoke_without_command=True, case_insensitive=True)
     async def _binary(self, ctx):
