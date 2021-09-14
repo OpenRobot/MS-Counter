@@ -17,7 +17,7 @@ class RomanDatabase:
     async def initialize(self):
         while True:
             try:
-                self.db = await asyncpg.create_pool(self.uri)
+                self.db = await asyncpg.create_pool(self.uri, max_size=20, min_size=5)
             except asyncpg.exceptions._base.InterfaceError:
                 await asyncio.sleep(5)
                 pass
@@ -144,12 +144,14 @@ class RomanDatabase:
         return int(num)
 
 class BinaryDatabase:
-    def __init__(self, loop, db_uri):
+    def __init__(self, loop, db_uri, db_obj):
         self.uri = str(db_uri)
         self.db = None
         loop.run_until_complete(self.initialize())
 
         self.is_modifying = False
+
+        self.db_obj = db_obj
 
     def wait_until_not_modifying(self):
         while self.is_modifying:
@@ -158,14 +160,17 @@ class BinaryDatabase:
         return
 
     async def initialize(self):
-        while True:
-            try:
-                self.db = await asyncpg.create_pool(self.uri)
-            except asyncpg.exceptions._base.InterfaceError:
-                await asyncio.sleep(5)
-                pass
-            else:
-                break
+        if not self.db_obj: # For making sure it doesnt have too many connections and traffic and to handle TooManyConnectionsError.
+            while True:
+                try:
+                    self.db = await asyncpg.create_pool(self.uri)
+                except asyncpg.exceptions._base.InterfaceError:
+                    await asyncio.sleep(5)
+                    pass
+                else:
+                    break
+        else:
+            self.db = self.db_obj
         
         while True:
             try:
@@ -287,12 +292,14 @@ class BinaryDatabase:
         return int(num)
 
 class HexadecimalDatabase:
-    def __init__(self, loop, db_uri):
+    def __init__(self, loop, db_uri, db_obj):
         self.uri = str(db_uri)
         self.db = None
         loop.run_until_complete(self.initialize())
 
         self.is_modifying = False
+
+        self.db_obj = db_obj
 
     def wait_until_not_modifying(self):
         while self.is_modifying:
@@ -301,14 +308,17 @@ class HexadecimalDatabase:
         return
 
     async def initialize(self):
-        while True:
-            try:
-                self.db = await asyncpg.create_pool(self.uri)
-            except asyncpg.exceptions._base.InterfaceError:
-                await asyncio.sleep(5)
-                pass
-            else:
-                break
+        if not self.db_obj: # For making sure it doesnt have too many connections and traffic and to handle TooManyConnectionsError.
+            while True:
+                try:
+                    self.db = await asyncpg.create_pool(self.uri)
+                except asyncpg.exceptions._base.InterfaceError:
+                    await asyncio.sleep(5)
+                    pass
+                else:
+                    break
+        else:
+            self.db = self.db_obj
         
         while True:
             try:
@@ -430,12 +440,14 @@ class HexadecimalDatabase:
         return int(num)
 
 class OctalDatabase:
-    def __init__(self, loop, db_uri):
+    def __init__(self, loop, db_uri, db_obj = None):
         self.uri = str(db_uri)
         self.db = None
         loop.run_until_complete(self.initialize())
 
         self.is_modifying = False
+
+        self.db_obj = db_obj
 
     def wait_until_not_modifying(self):
         while self.is_modifying:
@@ -444,14 +456,17 @@ class OctalDatabase:
         return
 
     async def initialize(self):
-        while True:
-            try:
-                self.db = await asyncpg.create_pool(self.uri)
-            except asyncpg.exceptions._base.InterfaceError:
-                await asyncio.sleep(5)
-                pass
-            else:
-                break
+        if not self.db_obj: # For making sure it doesnt have too many connections and traffic and to handle TooManyConnectionsError.
+            while True:
+                try:
+                    self.db = await asyncpg.create_pool(self.uri)
+                except asyncpg.exceptions._base.InterfaceError:
+                    await asyncio.sleep(5)
+                    pass
+                else:
+                    break
+        else:
+            self.db = self.db_obj
         
         while True:
             try:
@@ -575,6 +590,9 @@ class OctalDatabase:
 class Database:
     def __init__(self, *args, **kwargs):
         self.roman = RomanDatabase(*args, **kwargs)
+
+        kwargs['db_obj'] = self.roman.db
+
         self.binary = BinaryDatabase(*args, **kwargs)
         self.hexadecimal = HexadecimalDatabase(*args, **kwargs)
         self.octal = OctalDatabase(*args, **kwargs)

@@ -27,9 +27,12 @@ bot.octal = Octal(db.octal)
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} Is Ready!')
+    print(f'{bot.user} (Counter Bot) Is Ready!') 
 
 bot.load_extension('jishaku')
 bot.load_extension('cogs.roman')
+bot.load_extension('cogs.hexa')
+bot.load_extension('cogs.binary')
+bot.load_extension('cogs.octal')
 
 bot.run(TOKEN)
