@@ -29,7 +29,7 @@ async def on_ready():
 @bot.event
 async def on_message(msg: discord.Message):
     if re.match(rf'^<@(!)?{bot.user.id}>$', msg.content):
-        return await msg.channel.send("My prefix is `countr `! To get help, type `counutr help`!")
+        return await msg.channel.send("My prefix is `countr `! To get help, type `countr help`!")
     await bot.process_commands(msg)
 
 @bot.command(aliases=['latency'])
