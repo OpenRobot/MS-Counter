@@ -163,7 +163,10 @@ async def convert(ctx, num):
     try:
         num = int(num)
     except:
-        return await ctx.send("That is an Invalid integer.")
+        if num in bot.roman.roman:
+            return await ctx.reply(f"`{num}` in normal base-10/arabic numeral is `{bot.roman.decode(num)}`!\n\nFor the full table run `rc?table`")
+        else:
+            return await ctx.send("That is an invalid integer or roman numeral!")
         
     if num > 300000:
         return await ctx.send("Chill there bro.")
@@ -174,7 +177,7 @@ async def convert(ctx, num):
 async def current(ctx):
     num = await db.get_current_number()
 
-    await ctx.send(f"You are currently on `{bot.roman.encode(num)} ({num})`.")
+    await ctx.send(f"The current count is `{bot.roman.encode(num)} ({num})`.")
 
 bot.load_extension('jishaku')
 
