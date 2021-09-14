@@ -163,7 +163,7 @@ async def convert(ctx, num):
     try:
         num = int(num)
     except:
-        if num in bot.roman.roman:
+        if num[0] in bot.roman.switched_roman:
             return await ctx.reply(f"`{num}` in normal base-10/arabic numeral is `{bot.roman.decode(num)}`!\n\nFor the full table run `rc?table`")
         else:
             return await ctx.send("That is an invalid integer or roman numeral!")

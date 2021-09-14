@@ -24,6 +24,8 @@ class Roman:
 
         self.roman = roman
 
+        self.switched_roman = dict([(v, k) for k, v in self.roman.items()])
+
     def encode(self, num) -> str:
         def roman_num(num):
             for r in self.roman.keys():
@@ -38,7 +40,7 @@ class Roman:
     def decode(self, roman) -> int:
         roman = str(roman).upper()
 
-        values = [self.roman[r] for r in roman]
+        values = [self.switched_roman[r] for r in roman]
         return int(sum(
             val if val >= next_val else -val
             for val, next_val in zip(values[:-1], values[1:])
