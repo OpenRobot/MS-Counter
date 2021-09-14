@@ -1,4 +1,5 @@
 import asyncio
+import re
 from datetime import datetime
 import discord
 import asyncpg
@@ -28,6 +29,11 @@ bot.octal = Octal(db.octal)
 @bot.event
 async def on_ready():
     print(f'{bot.user} (Counter Bot) Is Ready!')
+
+@bot.event
+async def on_message(msg: discord.Message):
+    if re.match(rf'^<@(!)?{bot.user.id}>$', msg.content):
+        return await msg.channel.send("My prefix is `countr `! To get help, type `counutr help`!")
 
 @bot.command(aliases=['latency'])
 async def ping(ctx):
