@@ -1,13 +1,9 @@
 import asyncio
 import re
-from datetime import datetime
 import discord
-import asyncpg
-import json
 from discord.ext import commands
 from config import *
 from db import Database
-from collections import OrderedDict
 import jishaku
 from utils import Roman, Octal, Binary, Hexadecimal
 
