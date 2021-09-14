@@ -29,8 +29,20 @@ bot.octal = Octal(db.octal)
 async def on_ready():
     print(f'{bot.user} (Counter Bot) Is Ready!')
 
-@bot.command()
-async def ping(self, ctx)
+@bot.command(aliases=['latency'])
+async def ping(ctx):
+    embed = discord.Embed()
+    embed.color = 0x1FB052
+
+    embed.set_author(name='Latency:', icon_url=ctx.author.avatar.url)
+
+    embed.add_field(name='Websocket/Discord Latency:', value=f'`{round(bot.latency * 1000, 2)} ms`')
+
+    latency = await db.latency()
+
+    embed.add_field(name = 'Database Latency:', value=f'`{round(latency * 1000, 2)} ms`')
+
+    await ctx.send(embed=embed)
 
 bot.load_extension('jishaku')
 bot.load_extension('cogs.roman')

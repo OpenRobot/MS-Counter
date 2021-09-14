@@ -3,7 +3,7 @@ class Binary:
         self.db = db
 
     def encode(self, num) -> int:
-        return int(bin(num)[2:])
+        return int(bin(num))
 
     def decode(self, num) -> int:
         return int(str(num), base=2)
